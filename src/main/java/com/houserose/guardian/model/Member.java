@@ -10,19 +10,19 @@ import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-@Table(name = "member")
-@ToString(exclude = {"pictures", "contacts", "memberships"})
+@ToString(exclude = {"memberships", "pictures", "contacts"})
 @Data
 @Builder
 @Entity
@@ -51,7 +51,8 @@ public class Member {
    private List<Contact> contacts = new ArrayList<>();
 
    @Builder.Default
-   @OneToMany(mappedBy = "membership", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+   @ManyToMany(cascade = CascadeType.ALL)
+   @JoinTable(name = "membership_member", joinColumns = @JoinColumn(name = "member_id"), inverseJoinColumns = @JoinColumn(name = "membership_id"))
    @LazyCollection(LazyCollectionOption.FALSE)
    private List<MembershipMember> memberships = new ArrayList<>();
 
@@ -76,7 +77,7 @@ public class Member {
    }
 
    public void addMembership(Membership membership, String type) {
-      MembershipMember membershipMember = new MembershipMember(membership, this, type);
+      MembershipMember membershipMember = MembershipMember.builder().membership(membership).member(this).type(type).build();
       memberships.add(membershipMember);
       membership.getMembers().add(membershipMember);
    }

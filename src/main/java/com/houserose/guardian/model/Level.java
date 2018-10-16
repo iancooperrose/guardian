@@ -10,6 +10,7 @@ import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -33,7 +34,7 @@ public class Level {
    private String name;
 
    @Builder.Default
-   @OneToMany(mappedBy = "membership", cascade = CascadeType.ALL, orphanRemoval = true)
+   @OneToMany(mappedBy = "membership", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
    @LazyCollection(LazyCollectionOption.FALSE)
    private List<MembershipMember> memberships = new ArrayList<>();
 

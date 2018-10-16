@@ -5,17 +5,17 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import java.time.ZonedDateTime;
@@ -48,7 +48,8 @@ public class Membership {
    private ZonedDateTime created;
 
    @Builder.Default
-   @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+   @ManyToMany(cascade = CascadeType.ALL)
+   @JoinTable(name = "membership_member", joinColumns = @JoinColumn(name = "membership_id"), inverseJoinColumns = @JoinColumn(name = "member_id"))
    @LazyCollection(LazyCollectionOption.FALSE)
    private List<MembershipMember> members = new ArrayList<>();
 
@@ -62,12 +63,12 @@ public class Membership {
 //   }
 
    public void addMember(Member member, String type) {
-      MembershipMember membershipMember = new MembershipMember(this, member, type);
+      MembershipMember membershipMember = MembershipMember.builder().membership(this).member(member).type(type).build();
       members.add(membershipMember);
       member.getMemberships().add(membershipMember);
    }
 
-   public void removeMembershipMember(Member member) {
+   public void removeMember(Member member) {
       for (Iterator<MembershipMember> iterator = members.iterator(); iterator.hasNext(); ) {
          MembershipMember membershipMember = iterator.next();
 

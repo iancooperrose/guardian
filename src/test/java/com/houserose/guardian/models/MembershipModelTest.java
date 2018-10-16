@@ -46,7 +46,6 @@ import static com.houserose.guardian.GuardianTestDataFactory.laurelMariePickardD
 import static com.houserose.guardian.GuardianTestDataFactory.laurelMariePickardDefaultTxtContact;
 import static com.houserose.guardian.GuardianTestDataFactory.turtleLevel;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.codehaus.groovy.runtime.InvokerHelper.asList;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -143,17 +142,17 @@ public class MembershipModelTest {
       ecrMembership.setTerm(term);
       ecrMembership = membershipRepository.save(ecrMembership);
 
-      ecrMembership.addMember(ecr, "ward");
-      ecrMembership.addMember(icr, "guardian");
-      ecrMembership.addMember(lmp, "guardian");
-//      ecrMembership = membershipRepository.save(ecrMembership);
+//      ecrMembership.addMember(ecr, "ward");
+//      ecrMembership.addMember(icr, "guardian");
+//      ecrMembership.addMember(lmp, "guardian");
 //      ecr = memberRepository.save(ecr);
 //      icr = memberRepository.save(icr);
 //      lmp = memberRepository.save(lmp);
 //
-//      ecr.addMembership(ecrMembership, "ward");
-//      icr.addMembership(ecrMembership, "guardian");
-//      lmp.addMembership(ecrMembership, "guardian");
+      ecrMembership.addMember(ecr, "ward");
+      ecrMembership.addMember(icr, "guardian");
+      ecrMembership.addMember(lmp, "guardian");
+      ecrMembership = membershipRepository.save(ecrMembership);
 
       arisia = arisiaOrganization().build();
       arisia.addLevel(level);
@@ -161,7 +160,10 @@ public class MembershipModelTest {
       arisia = organizationRepository.save(arisia);
       arisia.addMembership(ecrMembership);
       arisia = organizationRepository.save(arisia);
-//      ecrMembership = membershipRepository.save(ecrMembership);
+      ecrMembership = membershipRepository.save(ecrMembership);
+      memberRepository.save(ecr);
+      memberRepository.save(icr);
+      memberRepository.save(lmp);
 
    }
 
@@ -179,7 +181,7 @@ public class MembershipModelTest {
    public void shouldReturnMembershipType() {
       Membership result = membershipRepository.findById(ecrMembership.getId()).orElse(null);
       assertThat(result).isNotNull();
-      assertThat(result.getMembers().get(0).getType()).isEqualTo("guardian");
+      assertThat(result.getMembers().get(0).getType()).isEqualTo("ward");
    }
 
 }
