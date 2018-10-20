@@ -1,0 +1,6 @@
+${AnsiColor.BRIGHT_GREEN}  _____                 __${AnsiColor.YELLOW}_
+${AnsiColor.BRIGHT_GREEN} / ___/_ _____ ________/ ${AnsiColor.YELLOW}(_)__ ____
+${AnsiColor.BRIGHT_GREEN}/ (_ / // / _ `/ __/ _  /${AnsiColor.YELLOW} / _ `/ _ \
+${AnsiColor.BRIGHT_GREEN}\___/\_,_/\_,_/_/  \_,_/${AnsiColor.YELLOW}_/\_,_/_//_/
+
+${application.formatted-version}

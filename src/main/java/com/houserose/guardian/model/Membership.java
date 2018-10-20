@@ -5,10 +5,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,6 +24,7 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 
 @ToString(exclude = {"membershipMembers", "organization", "level", "term"})
 @Data
@@ -32,8 +35,10 @@ import java.util.List;
 public class Membership {
 
    @Id
-   @GeneratedValue(strategy = GenerationType.IDENTITY)
-   private Long id;
+   @GenericGenerator(name = "uuid", strategy = "uuid2")
+   @GeneratedValue(generator = "uuid")
+   @Column(name = "id", unique = true, nullable = false)
+   private UUID id;
 
    @ManyToOne
    @JoinColumn(name = "level_fk")
@@ -49,8 +54,6 @@ public class Membership {
 
    @Builder.Default
    @OneToMany(mappedBy = "membership", cascade = CascadeType.ALL)
-//   @ManyToMany(cascade = CascadeType.ALL)
-//   @JoinTable(name = "membership_member", joinColumns = @JoinColumn(name = "membership_id"), inverseJoinColumns = @JoinColumn(name = "member_id"))
    @LazyCollection(LazyCollectionOption.FALSE)
    private List<MembershipMember> membershipMembers = new ArrayList<>();
 
@@ -58,10 +61,6 @@ public class Membership {
    @JoinColumn(name = "organization_fk")
    @LazyCollection(LazyCollectionOption.FALSE)
    private Organization organization;
-//
-//   public List<MembershipMember> getMembershipMembers() {
-//      return members;
-//   }
 
    public void addMembershipMember(Member member, String type) {
       MembershipMember membershipMember = MembershipMember.builder().membership(this).member(member).type(type).build();

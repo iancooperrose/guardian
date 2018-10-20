@@ -5,15 +5,19 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
+import org.hibernate.annotations.Type;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import java.util.UUID;
 
 @ToString(exclude = {"member"})
 @Data
@@ -24,8 +28,10 @@ import javax.persistence.ManyToOne;
 public class Contact {
 
    @Id
-   @GeneratedValue(strategy = GenerationType.IDENTITY)
-   private Long id;
+   @GenericGenerator(name = "uuid", strategy = "uuid2")
+   @GeneratedValue(generator = "uuid")
+   @Column(name = "id", unique = true, nullable = false)
+   private UUID id;
    private String type;
    private String value;
    private Long contactOrder;

@@ -5,10 +5,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -19,6 +21,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @ToString(exclude = {"memberships", "organization"})
 @Data
@@ -29,8 +32,10 @@ import java.util.List;
 public class Level {
 
    @Id
-   @GeneratedValue(strategy = GenerationType.IDENTITY)
-   private Long id;
+   @GenericGenerator(name = "uuid", strategy = "uuid2")
+   @GeneratedValue(generator = "uuid")
+   @Column(name = "id", unique = true, nullable = false)
+   private UUID id;
    private String name;
 
    @Builder.Default

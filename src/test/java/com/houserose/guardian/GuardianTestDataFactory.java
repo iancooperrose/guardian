@@ -11,12 +11,14 @@ import com.houserose.guardian.model.Term;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.UUID;
 
 public class GuardianTestDataFactory {
 
    public static final ZonedDateTime ARISIA_2017_START = ZonedDateTime.of(2017, 1, 13, 0, 0, 0, 0, ZoneId.of("America/New_York"));
    public static final ZonedDateTime ARISIA_2018_START = ZonedDateTime.of(2018, 1, 12, 0, 0, 0, 0, ZoneId.of("America/New_York"));
    public static final ZonedDateTime ARISIA_2019_START = ZonedDateTime.of(2019, 1, 18, 0, 0, 0, 0, ZoneId.of("America/New_York"));
+   public static final UUID ORGANIZATION_TEST_UUID = UUID.fromString("00000000-0000-0000-0000-000000000000");
 
    public static Contact.ContactBuilder ianCooperRoseDefaultPhoneContact() {
       return Contact.builder()
@@ -384,7 +386,7 @@ public class GuardianTestDataFactory {
 
    public static Organization.OrganizationBuilder arisiaOrganization() {
       return Organization.builder()
-              .id(1L)
+              .id(ORGANIZATION_TEST_UUID)
               .name("Arisia");
 
    }

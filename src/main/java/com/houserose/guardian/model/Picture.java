@@ -5,9 +5,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
+import org.hibernate.annotations.Type;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,6 +18,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import java.util.UUID;
 
 @ToString(exclude = {"member"})
 @Table(name = "picture")
@@ -26,8 +30,10 @@ import javax.persistence.Table;
 public class Picture {
 
    @Id
-   @GeneratedValue(strategy = GenerationType.IDENTITY)
-   private Long id;
+   @GenericGenerator(name = "uuid", strategy = "uuid2")
+   @GeneratedValue(generator = "uuid")
+   @Column(name = "id", unique = true, nullable = false)
+   private UUID id;
    private String type;
    private Boolean isDefault;
    private String name;

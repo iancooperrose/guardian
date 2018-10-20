@@ -140,8 +140,8 @@ public class MembershipModelTest {
       arisia = arisiaOrganization().build();
       arisia.addLevel(level);
       arisia.addTerm(term);
-      arisia.addMembership(ecrMembership);
       arisia = organizationRepository.save(arisia);
+      arisia.addMembership(ecrMembership);
       ecrMembership = membershipRepository.save(ecrMembership);
 
    }
