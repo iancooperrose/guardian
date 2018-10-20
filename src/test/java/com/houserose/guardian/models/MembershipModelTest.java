@@ -21,13 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.util.List;
-
-import static com.houserose.guardian.GuardianTestDataFactory.ARISIA_2017_START;
-import static com.houserose.guardian.GuardianTestDataFactory.ARISIA_2018_START;
-import static com.houserose.guardian.GuardianTestDataFactory.ARISIA_2019_START;
 import static com.houserose.guardian.GuardianTestDataFactory.arisia2019Term;
 import static com.houserose.guardian.GuardianTestDataFactory.arisiaOrganization;
 import static com.houserose.guardian.GuardianTestDataFactory.elizabethCooperRose;
@@ -132,56 +125,40 @@ public class MembershipModelTest {
       icr = memberRepository.save(icr);
       lmp = memberRepository.save(lmp);
 
-      ecrMembership = elizabethCooperRoseMembership().build();
       level = turtleLevel().build();
       level = levelRepository.save(level);
       term = arisia2019Term().build();
       term = termRepository.save(term);
 
+      ecrMembership = elizabethCooperRoseMembership().build();
       ecrMembership.setLevel(level);
       ecrMembership.setTerm(term);
-      ecrMembership = membershipRepository.save(ecrMembership);
-
-//      ecrMembership.addMember(ecr, "ward");
-//      ecrMembership.addMember(icr, "guardian");
-//      ecrMembership.addMember(lmp, "guardian");
-//      ecr = memberRepository.save(ecr);
-//      icr = memberRepository.save(icr);
-//      lmp = memberRepository.save(lmp);
-//
-      ecrMembership.addMember(ecr, "ward");
-      ecrMembership.addMember(icr, "guardian");
-      ecrMembership.addMember(lmp, "guardian");
-      ecrMembership = membershipRepository.save(ecrMembership);
+      ecrMembership.addMembershipMember(ecr, "ward");
+      ecrMembership.addMembershipMember(icr, "guardian");
+      ecrMembership.addMembershipMember(lmp, "guardian");
 
       arisia = arisiaOrganization().build();
       arisia.addLevel(level);
       arisia.addTerm(term);
-      arisia = organizationRepository.save(arisia);
       arisia.addMembership(ecrMembership);
       arisia = organizationRepository.save(arisia);
       ecrMembership = membershipRepository.save(ecrMembership);
-      memberRepository.save(ecr);
-      memberRepository.save(icr);
-      memberRepository.save(lmp);
 
    }
 
    @Test
    public void shouldReturnMembershipMembers() {
-      List<Member> memberResultList = memberRepository.findAll();
-      List<Membership> membershipResultList = membershipRepository.findAll();
-      assertThat(memberResultList).isNotNull();
-      assertThat(membershipResultList).isNotNull();
-      assertThat(membershipResultList.get(0).getMembers().size()).isEqualTo(3);
-      assertThat(membershipResultList.get(0).getMembers().get(0).getMember().getLastName()).isEqualTo("Rose");
+      Membership membershipResult = membershipRepository.findById(ecrMembership.getId()).orElse(null);
+      assertThat(membershipResult).isNotNull();
+      assertThat(membershipResult.getMembershipMembers().size()).isEqualTo(3);
+      assertThat(membershipResult.getMembershipMembers().get(0).getMember().getLastName()).isEqualTo("Rose");
    }
 
    @Test
    public void shouldReturnMembershipType() {
       Membership result = membershipRepository.findById(ecrMembership.getId()).orElse(null);
       assertThat(result).isNotNull();
-      assertThat(result.getMembers().get(0).getType()).isEqualTo("ward");
+      assertThat(result.getMembershipMembers().get(0).getType()).isEqualTo("ward");
    }
 
 }

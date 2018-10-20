@@ -8,6 +8,9 @@ import lombok.ToString;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
+import javax.persistence.AssociationOverride;
+import javax.persistence.AssociationOverrides;
+import javax.persistence.CascadeType;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -33,12 +36,15 @@ public class MembershipMember {
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Long id;
 
+
    @ManyToOne
    @JoinColumn(name = "membership_id")
+   @LazyCollection(LazyCollectionOption.FALSE)
    private Membership membership;
 
    @ManyToOne
    @JoinColumn(name = "member_id")
+   @LazyCollection(LazyCollectionOption.FALSE)
    private Member member;
 
    private String type;

@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-@ToString(exclude = {"memberships", "pictures", "contacts"})
+@ToString(exclude = {"membershipMembers", "pictures", "contacts"})
 @Data
 @Builder
 @Entity
@@ -41,20 +41,21 @@ public class Member {
    private LocalDate dateOfBirth;
 
    @Builder.Default
-   @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+   @OneToMany(mappedBy = "member")
    @LazyCollection(LazyCollectionOption.FALSE)
    private List<Picture> pictures = new ArrayList<>();
 
    @Builder.Default
-   @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+   @OneToMany(mappedBy = "member")
    @LazyCollection(LazyCollectionOption.FALSE)
    private List<Contact> contacts = new ArrayList<>();
 
    @Builder.Default
-   @ManyToMany(cascade = CascadeType.ALL)
-   @JoinTable(name = "membership_member", joinColumns = @JoinColumn(name = "member_id"), inverseJoinColumns = @JoinColumn(name = "membership_id"))
+   @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+//   @ManyToMany(cascade = CascadeType.ALL)
+//   @JoinTable(name = "membership_member", joinColumns = @JoinColumn(name = "member_id"), inverseJoinColumns = @JoinColumn(name = "membership_id"))
    @LazyCollection(LazyCollectionOption.FALSE)
-   private List<MembershipMember> memberships = new ArrayList<>();
+   private List<MembershipMember> membershipMembers = new ArrayList<>();
 
    public void addPicture(Picture picture) {
       pictures.add(picture);
@@ -76,23 +77,23 @@ public class Member {
       this.contacts.remove(contact);
    }
 
-   public void addMembership(Membership membership, String type) {
+   public void addMembershipMember(Membership membership, String type) {
       MembershipMember membershipMember = MembershipMember.builder().membership(membership).member(this).type(type).build();
-      memberships.add(membershipMember);
-      membership.getMembers().add(membershipMember);
+      membershipMembers.add(membershipMember);
+      membership.getMembershipMembers().add(membershipMember);
    }
 
-   public void removeMembership(Membership membership) {
-      for (Iterator<MembershipMember> iterator = memberships.iterator(); iterator.hasNext(); ) {
-         MembershipMember membershipMember = iterator.next();
-
-         if (membershipMember.getMember().equals(this) &&
-                 membershipMember.getMembership().equals(membership)) {
-            iterator.remove();
-            membershipMember.getMember().getMemberships().remove(membershipMember);
-            membershipMember.setMembership(null);
-            membershipMember.setMember(null);
-         }
-      }
-   }
+//   public void removeMembership(Membership membership) {
+//      for (Iterator<MembershipMember> iterator = memberships.iterator(); iterator.hasNext(); ) {
+//         MembershipMember membershipMember = iterator.next();
+//
+//         if (membershipMember.getMember().equals(this) &&
+//                 membershipMember.getMembership().equals(membership)) {
+//            iterator.remove();
+//            membershipMember.getMember().getMemberships().remove(membershipMember);
+//            membershipMember.setMembership(null);
+//            membershipMember.setMember(null);
+//         }
+//      }
+//   }
 }

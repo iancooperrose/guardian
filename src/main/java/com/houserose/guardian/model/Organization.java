@@ -32,17 +32,17 @@ public class Organization {
    private String name;
 
    @Builder.Default
-   @OneToMany(mappedBy = "organization", cascade = CascadeType.ALL, orphanRemoval = true)
+   @OneToMany(mappedBy = "organization")
    @LazyCollection(LazyCollectionOption.FALSE)
    private List<Membership> memberships = new ArrayList<>();
 
    @Builder.Default
-   @OneToMany(mappedBy = "organization", cascade = CascadeType.ALL, orphanRemoval = true)
+   @OneToMany(mappedBy = "organization")
    @LazyCollection(LazyCollectionOption.FALSE)
    private List<Level> levels = new ArrayList<>();
 
    @Builder.Default
-   @OneToMany(mappedBy = "organization", cascade = CascadeType.ALL, orphanRemoval = true)
+   @OneToMany(mappedBy = "organization")
    @LazyCollection(LazyCollectionOption.FALSE)
    private List<Term> terms = new ArrayList<>();
 

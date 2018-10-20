@@ -34,7 +34,7 @@ public class Level {
    private String name;
 
    @Builder.Default
-   @OneToMany(mappedBy = "membership", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+   @OneToMany(mappedBy = "membership")
    @LazyCollection(LazyCollectionOption.FALSE)
    private List<MembershipMember> memberships = new ArrayList<>();
 

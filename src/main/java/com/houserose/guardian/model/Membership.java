@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-@ToString(exclude = {"members", "organization", "level", "term"})
+@ToString(exclude = {"membershipMembers", "organization", "level", "term"})
 @Data
 @Builder
 @NoArgsConstructor
@@ -48,10 +48,11 @@ public class Membership {
    private ZonedDateTime created;
 
    @Builder.Default
-   @ManyToMany(cascade = CascadeType.ALL)
-   @JoinTable(name = "membership_member", joinColumns = @JoinColumn(name = "membership_id"), inverseJoinColumns = @JoinColumn(name = "member_id"))
+   @OneToMany(mappedBy = "membership", cascade = CascadeType.ALL)
+//   @ManyToMany(cascade = CascadeType.ALL)
+//   @JoinTable(name = "membership_member", joinColumns = @JoinColumn(name = "membership_id"), inverseJoinColumns = @JoinColumn(name = "member_id"))
    @LazyCollection(LazyCollectionOption.FALSE)
-   private List<MembershipMember> members = new ArrayList<>();
+   private List<MembershipMember> membershipMembers = new ArrayList<>();
 
    @ManyToOne
    @JoinColumn(name = "organization_fk")
@@ -62,24 +63,24 @@ public class Membership {
 //      return members;
 //   }
 
-   public void addMember(Member member, String type) {
+   public void addMembershipMember(Member member, String type) {
       MembershipMember membershipMember = MembershipMember.builder().membership(this).member(member).type(type).build();
-      members.add(membershipMember);
-      member.getMemberships().add(membershipMember);
+      membershipMembers.add(membershipMember);
+      member.getMembershipMembers().add(membershipMember);
    }
 
-   public void removeMember(Member member) {
-      for (Iterator<MembershipMember> iterator = members.iterator(); iterator.hasNext(); ) {
-         MembershipMember membershipMember = iterator.next();
-
-         if (membershipMember.getMembership().equals(this) && membershipMember.getMember().equals(member)) {
-            iterator.remove();
-            membershipMember.getMember().getMemberships().remove(membershipMember);
-            membershipMember.setMembership(null);
-            membershipMember.setMember(null);
-         }
-      }
-   }
+//   public void removeMember(Member member) {
+//      for (Iterator<MembershipMember> iterator = members.iterator(); iterator.hasNext(); ) {
+//         MembershipMember membershipMember = iterator.next();
+//
+//         if (membershipMember.getMembership().equals(this) && membershipMember.getMember().equals(member)) {
+//            iterator.remove();
+//            membershipMember.getMember().getMemberships().remove(membershipMember);
+//            membershipMember.setMembership(null);
+//            membershipMember.setMember(null);
+//         }
+//      }
+//   }
 
 //   public void addLevel(Level level) {
 //      this.setLevel(level);
