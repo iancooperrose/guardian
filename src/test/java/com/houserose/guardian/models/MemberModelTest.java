@@ -14,8 +14,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static com.houserose.guardian.GuardianTestDataFactory.ianCooperRose;
-import static com.houserose.guardian.GuardianTestDataFactory.ianCooperRoseDefaultPhoneContact;
 import static com.houserose.guardian.GuardianTestDataFactory.ianCooperRoseDefaultProfilePicture;
+import static com.houserose.guardian.GuardianTestDataFactory.ianCooperRosePhoneContact;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
@@ -36,7 +36,7 @@ public class MemberModelTest {
    public void setUp() {
       icr = memberRepository.save(ianCooperRose().build());
       Picture pic = pictureRepository.save(ianCooperRoseDefaultProfilePicture().build());
-      Contact phone = contactRepository.save(ianCooperRoseDefaultPhoneContact().build());
+      Contact phone = contactRepository.save(ianCooperRosePhoneContact().build());
       icr.addPicture(pic);
       icr.addContact(phone);
       memberRepository.save(icr);

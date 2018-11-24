@@ -1,6 +1,9 @@
 package com.houserose.guardian.serialization;
 
+import com.houserose.guardian.model.Member;
 import com.houserose.guardian.model.Membership;
+import com.houserose.guardian.model.Organization;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,10 +12,24 @@ import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.net.URI;
 
-import static com.houserose.guardian.GuardianTestDataFactory.*;
+import static com.houserose.guardian.GuardianTestDataFactory.ECR_MEMBERSHIP_TEST_UUID;
+import static com.houserose.guardian.GuardianTestDataFactory.arisiaOrganization;
+import static com.houserose.guardian.GuardianTestDataFactory.elizabethCooperRose;
+import static com.houserose.guardian.GuardianTestDataFactory.elizabethCooperRoseDefaultProfilePicture;
+import static com.houserose.guardian.GuardianTestDataFactory.elizabethCooperRoseMembership;
+import static com.houserose.guardian.GuardianTestDataFactory.ianCooperRose;
+import static com.houserose.guardian.GuardianTestDataFactory.ianCooperRoseDefaultProfilePicture;
+import static com.houserose.guardian.GuardianTestDataFactory.ianCooperRosePhoneContact;
+import static com.houserose.guardian.GuardianTestDataFactory.ianCooperRoseSlackContact;
+import static com.houserose.guardian.GuardianTestDataFactory.ianCooperRoseSmsContact;
+import static com.houserose.guardian.GuardianTestDataFactory.ianCooperRoseTwitterContact;
+import static com.houserose.guardian.GuardianTestDataFactory.laurelMariePickard;
+import static com.houserose.guardian.GuardianTestDataFactory.laurelMariePickardDefaultPhoneContact;
+import static com.houserose.guardian.GuardianTestDataFactory.laurelMariePickardDefaultProfilePicture;
+import static com.houserose.guardian.GuardianTestDataFactory.laurelMariePickardDefaultSlackContact;
+import static com.houserose.guardian.GuardianTestDataFactory.laurelMariePickardDefaultTxtContact;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
@@ -22,115 +39,92 @@ public class MembershipSerializationTest {
    @Autowired
    private JacksonTester<Membership> json;
 
+   private Membership subject;
+
+   @Before
+   public void setUp() {
+      Member ecr = elizabethCooperRose().build();
+      ecr.addPicture(elizabethCooperRoseDefaultProfilePicture().build());
+      Member icr = ianCooperRose().build();
+      icr.addPicture(ianCooperRoseDefaultProfilePicture().build());
+      icr.addContact(ianCooperRosePhoneContact().build());
+      icr.addContact(ianCooperRoseSmsContact().build());
+      icr.addContact(ianCooperRoseSlackContact().build());
+      icr.addContact(ianCooperRoseTwitterContact().build());
+      Member lmp = laurelMariePickard().build();
+      lmp.addPicture(laurelMariePickardDefaultProfilePicture().build());
+      lmp.addContact(laurelMariePickardDefaultPhoneContact().build());
+      lmp.addContact(laurelMariePickardDefaultTxtContact().build());
+      lmp.addContact(laurelMariePickardDefaultSlackContact().build());
+
+      Organization arisia = arisiaOrganization().build();
+
+      subject = elizabethCooperRoseMembership().build();
+      subject.addMembershipMember(ecr, "ward");
+      subject.addMembershipMember(icr, "guardian");
+      subject.addMembershipMember(lmp, "guardian");
+//      subject.setOrganization(arisia);
+
+      arisia.addMembership(subject);
+   }
+
    @Test
    public void serializationTest() throws IOException {
 
-      System.out.println(this.json.write(elizabethCooperRoseMembership().build()));
-      System.out.println(this.json.write(kathleenLouiseBouchardMembership().build()));
-      System.out.println(this.json.write(connorPaulBouchardMembership().build()));
-      System.out.println(this.json.write(penelopeAdaPickardMembership().build()));
-      System.out.println(this.json.write(maxwellAllenPickardMembership().build()));
+      System.out.println(this.json.write(subject));
 
-      assertThat(this.json.write(elizabethCooperRoseMembership().build()))
-              .extractingJsonPathNumberValue("@.id")
-              .isEqualTo(1);
-      assertThat(this.json.write(elizabethCooperRoseMembership().build()))
-              .extractingJsonPathNumberValue("@.member.id")
-              .isEqualTo(1);
-      assertThat(this.json.write(elizabethCooperRoseMembership().build()))
-              .extractingJsonPathStringValue("@.member.firstName")
-              .isEqualTo("Elizabeth");
-      assertThat(this.json.write(elizabethCooperRoseMembership().build()))
-              .extractingJsonPathStringValue("@.member.middleName")
-              .isEqualTo("Cooper");
-      assertThat(this.json.write(elizabethCooperRoseMembership().build()))
-              .extractingJsonPathStringValue("@.member.lastName")
-              .isEqualTo("Rose");
-      assertThat(this.json.write(elizabethCooperRoseMembership().build()))
-              .extractingJsonPathStringValue("@.member.nameSuffix")
-              .isEqualTo("II");
-      assertThat(this.json.write(elizabethCooperRoseMembership().build()))
-              .extractingJsonPathStringValue("@.member.commonName")
-              .isEqualTo("Lizzie");
-      assertThat(this.json.write(elizabethCooperRoseMembership().build()))
-              .extractingJsonPathStringValue("@.member.dateOfBirth")
-              .isEqualTo("2015-09-01");
-      assertThat(this.json.write(elizabethCooperRoseMembership().build()))
-              .extractingJsonPathNumberValue("@.member.pictures[0].id")
-              .isEqualTo(1);
-      assertThat(this.json.write(elizabethCooperRoseMembership().build()))
-              .extractingJsonPathStringValue("@.member.pictures[0].name")
-              .isEqualTo("elizabeth_cooper_rose.jpeg");
-      assertThat(this.json.write(elizabethCooperRoseMembership().build()))
-              .extractingJsonPathNumberValue("@.guardians[0].id")
-              .isEqualTo(7);
-      assertThat(this.json.write(elizabethCooperRoseMembership().build()))
-              .extractingJsonPathStringValue("@.guardians[0].firstName")
-              .isEqualTo("Ian");
-      assertThat(this.json.write(elizabethCooperRoseMembership().build()))
-              .extractingJsonPathStringValue("@.guardians[0].lastName")
-              .isEqualTo("Rose");
-      assertThat(this.json.write(elizabethCooperRoseMembership().build()))
-              .extractingJsonPathNumberValue("@.guardians[1].id")
-              .isEqualTo(8);
-      assertThat(this.json.write(elizabethCooperRoseMembership().build()))
-              .extractingJsonPathStringValue("@.guardians[1].firstName")
-              .isEqualTo("Aimee");
-      assertThat(this.json.write(elizabethCooperRoseMembership().build()))
-              .extractingJsonPathStringValue("@.guardians[1].lastName")
-              .isEqualTo("Bouchard");
-      assertThat(this.json.write(elizabethCooperRoseMembership().build()))
-              .extractingJsonPathNumberValue("@.guardians[2].id")
-              .isEqualTo(9);
-      assertThat(this.json.write(elizabethCooperRoseMembership().build()))
-              .extractingJsonPathStringValue("@.guardians[2].firstName")
-              .isEqualTo("Michelle");
-      assertThat(this.json.write(elizabethCooperRoseMembership().build()))
-              .extractingJsonPathStringValue("@.guardians[2].lastName")
-              .isEqualTo("Driscoll");
-      assertThat(this.json.write(elizabethCooperRoseMembership().build()))
-              .extractingJsonPathNumberValue("@.guardians[3].id")
-              .isEqualTo(6);
-      assertThat(this.json.write(elizabethCooperRoseMembership().build()))
-              .extractingJsonPathStringValue("@.guardians[3].firstName")
-              .isEqualTo("Laurel");
-      assertThat(this.json.write(elizabethCooperRoseMembership().build()))
-              .extractingJsonPathStringValue("@.guardians[3].lastName")
-              .isEqualTo("Pickard");
-      assertThat(this.json.write(elizabethCooperRoseMembership().build()))
-              .extractingJsonPathNumberValue("@.guardians[4].id")
-              .isEqualTo(10);
-      assertThat(this.json.write(elizabethCooperRoseMembership().build()))
-              .extractingJsonPathStringValue("@.guardians[4].firstName")
-              .isEqualTo("Michael");
-      assertThat(this.json.write(elizabethCooperRoseMembership().build()))
-              .extractingJsonPathStringValue("@.guardians[4].lastName")
-              .isEqualTo("Schneider");
-      assertThat(this.json.write(elizabethCooperRoseMembership().build()))
+      assertThat(this.json.write(subject))
+              .extractingJsonPathStringValue("@.created")
+              .isEqualTo("2018-08-25T17:53:37-04:00");
+      assertThat(this.json.write(subject))
+              .extractingJsonPathStringValue("@.id")
+              .isEqualTo("00000000-0000-0000-0000-000000000000");
+      assertThat(this.json.write(subject))
+              .extractingJsonPathStringValue("@.level.id")
+              .isEqualTo("00000000-0000-0005-0000-000000000000");
+      assertThat(this.json.write(subject))
+              .extractingJsonPathStringValue("@.level.name")
+              .isEqualTo("Turtle Track");
+      assertThat(this.json.write(subject))
+              .extractingJsonPathStringValue("@.term.id")
+              .isEqualTo("00000000-0000-0006-0002-000000000000");
+      assertThat(this.json.write(subject))
               .extractingJsonPathStringValue("@.term.start")
-              .isEqualTo("2019-01-18");
-      assertThat(this.json.write(elizabethCooperRoseMembership().build()))
-              .extractingJsonPathNumberValue("@.term.duration")
-              .isEqualTo(4);
-      assertThat(this.json.write(elizabethCooperRoseMembership().build()))
-              .extractingJsonPathNumberValue("@.organization.id")
-              .isEqualTo(1);
-      assertThat(this.json.write(elizabethCooperRoseMembership().build()))
+              .isEqualTo("2019-01-18T00:00:00-05:00");
+      assertThat(this.json.write(subject))
+              .extractingJsonPathStringValue("@.organization.id")
+              .isEqualTo("00000000-0000-0002-0000-000000000000");
+      assertThat(this.json.write(subject))
               .extractingJsonPathStringValue("@.organization.name")
               .isEqualTo("Arisia");
-      assertThat(this.json.write(elizabethCooperRoseMembership().build()))
-              .extractingJsonPathStringValue("@.level")
-              .isEqualTo("TURTLE");
-      assertThat(this.json.write(elizabethCooperRoseMembership().build()))
-              .extractingJsonPathStringValue("@.created")
-              .isEqualTo("2018-08-25T17:53:37");
+      assertThat(this.json.write(subject))
+              .extractingJsonPathStringValue("@.membershipMembers[0].membership")
+              .isEqualTo("00000000-0000-0000-0000-000000000000");
+      assertThat(this.json.write(subject))
+              .extractingJsonPathStringValue("@.membershipMembers[0].member")
+              .isEqualTo("00000000-0000-0001-0000-000000000000");
+      assertThat(this.json.write(subject))
+              .extractingJsonPathStringValue("@.membershipMembers[0].type")
+              .isEqualTo("ward");
+      assertThat(this.json.write(subject))
+              .extractingJsonPathStringValue("@.membershipMembers[1].member")
+              .isEqualTo("00000000-0000-0001-0005-000000000000");
+      assertThat(this.json.write(subject))
+              .extractingJsonPathStringValue("@.membershipMembers[1].type")
+              .isEqualTo("guardian");
+      assertThat(this.json.write(subject))
+              .extractingJsonPathStringValue("@.membershipMembers[2].member")
+              .isEqualTo("00000000-0000-0001-0006-000000000000");
+      assertThat(this.json.write(subject))
+              .extractingJsonPathStringValue("@.membershipMembers[2].type")
+              .isEqualTo("guardian");
    }
 
    @Test
    public void deserializationTest() throws IOException {
-//      String content = "{\"id\":1,\"member\":{\"id\":1,\"firstName\":\"Elizabeth\",\"middleName\":\"Cooper\",\"lastName\":\"Rose\",\"nameSuffix\":\"II\",\"commonName\":\"Lizzie\",\"dateOfBirth\":\"2015-09-01\",\"pictures\":[{\"id\":1,\"type\":\"profile\",\"isDefault\":true,\"name\":\"elizabeth_cooper_rose.jpeg\",\"uri\":\"http://guardian.houserose.com/guardian/organization/images/profile/00/00/00/1\",\"mediaType\":\"image/jpeg\",\"height\":300,\"width\":300,\"timeAdded\":\"2018-08-18T03:27:45\"}],\"contacts\":null},\"guardians\":[{\"id\":7,\"firstName\":\"Ian\",\"middleName\":\"Cooper\",\"lastName\":\"Rose\",\"nameSuffix\":null,\"commonName\":\"Ian\",\"dateOfBirth\":\"1969-12-22\",\"pictures\":[{\"id\":7,\"type\":\"profile\",\"isDefault\":true,\"name\":\"ian_cooper_rose.jpeg\",\"uri\":\"http://guardian.houserose.com/guardian/organization/images/profile/00/00/00/7\",\"mediaType\":\"image/jpeg\",\"height\":300,\"width\":300,\"timeAdded\":\"2018-08-18T04:32:23\"}],\"contacts\":[{\"id\":1,\"type\":\"phone\",\"value\":\"(413) 626-6101\",\"contactOrder\":1,\"notificationOrder\":0},{\"id\":2,\"type\":\"txt\",\"value\":\"(413) 626-6101\",\"contactOrder\":2,\"notificationOrder\":1},{\"id\":3,\"type\":\"slack\",\"value\":\"POST https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX\",\"contactOrder\":3,\"notificationOrder\":2},{\"id\":4,\"type\":\"twitter\",\"value\":\"ian.cooper.rose\",\"contactOrder\":0,\"notificationOrder\":3}]},{\"id\":8,\"firstName\":\"Aimee\",\"middleName\":\"Katherine\",\"lastName\":\"Bouchard\",\"nameSuffix\":null,\"commonName\":\"Aimee\",\"dateOfBirth\":\"1980-07-29\",\"pictures\":[{\"id\":8,\"type\":\"profile\",\"isDefault\":true,\"name\":\"aimee_katherine_bouchard.jpeg\",\"uri\":\"http://guardian.houserose.com/guardian/organization/images/profile/00/00/00/8\",\"mediaType\":\"image/jpeg\",\"height\":300,\"width\":300,\"timeAdded\":\"2018-08-18T04:33:24\"}],\"contacts\":[{\"id\":8,\"type\":\"phone\",\"value\":\"(860) 841-2322\",\"contactOrder\":1,\"notificationOrder\":0},{\"id\":9,\"type\":\"txt\",\"value\":\"(860) 841-2322\",\"contactOrder\":2,\"notificationOrder\":1},{\"id\":10,\"type\":\"slack\",\"value\":\"POST https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX\",\"contactOrder\":3,\"notificationOrder\":2}]},{\"id\":9,\"firstName\":\"Michelle\",\"middleName\":\"Louise\",\"lastName\":\"Driscoll\",\"nameSuffix\":null,\"commonName\":\"Michelle\",\"dateOfBirth\":\"1979-05-06\",\"pictures\":[{\"id\":9,\"type\":\"profile\",\"isDefault\":true,\"name\":\"michelle_louise_driscoll.jpeg\",\"uri\":\"http://guardian.houserose.com/guardian/organization/images/profile/00/00/00/9\",\"mediaType\":\"image/jpeg\",\"height\":300,\"width\":300,\"timeAdded\":\"2018-08-18T04:34:15\"}],\"contacts\":[{\"id\":11,\"type\":\"phone\",\"value\":\"(860) 977-3131\",\"contactOrder\":1,\"notificationOrder\":0},{\"id\":12,\"type\":\"txt\",\"value\":\"(860) 977-3131\",\"contactOrder\":2,\"notificationOrder\":1},{\"id\":13,\"type\":\"slack\",\"value\":\"https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX\",\"contactOrder\":3,\"notificationOrder\":2},{\"id\":14,\"type\":\"facebook\",\"value\":\"9024704\",\"contactOrder\":3,\"notificationOrder\":2}]},{\"id\":6,\"firstName\":\"Laurel\",\"middleName\":\"Marie\",\"lastName\":\"Pickard\",\"nameSuffix\":null,\"commonName\":\"Laurel\",\"dateOfBirth\":\"1982-10-18\",\"pictures\":[{\"id\":6,\"type\":\"profile\",\"isDefault\":true,\"name\":\"laurel_marie_pickard.jpeg\",\"uri\":\"http://guardian.houserose.com/guardian/organization/images/profile/00/00/00/6\",\"mediaType\":\"image/jpeg\",\"height\":300,\"width\":300,\"timeAdded\":\"2018-08-18T04:31:37\"}],\"contacts\":[{\"id\":5,\"type\":\"phone\",\"value\":\"(860) 558-9530\",\"contactOrder\":1,\"notificationOrder\":0},{\"id\":6,\"type\":\"txt\",\"value\":\"(860) 558-9530\",\"contactOrder\":2,\"notificationOrder\":1},{\"id\":7,\"type\":\"slack\",\"value\":\"POST https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX\",\"contactOrder\":3,\"notificationOrder\":2}]},{\"id\":10,\"firstName\":\"Michael\",\"middleName\":\"Andrew\",\"lastName\":\"Schneider\",\"nameSuffix\":null,\"commonName\":\"Micah\",\"dateOfBirth\":\"1971-06-18\",\"pictures\":[{\"id\":10,\"type\":\"profile\",\"isDefault\":true,\"name\":\"michael_andrew_schneider.jpeg\",\"uri\":\"http://guardian.houserose.com/guardian/organization/images/profile/00/00/00/10\",\"mediaType\":\"image/jpeg\",\"height\":300,\"width\":300,\"timeAdded\":\"2018-08-18T04:35:24\"}],\"contacts\":[{\"id\":15,\"type\":\"phone\",\"value\":\"(413) 626-9760\",\"contactOrder\":1,\"notificationOrder\":0},{\"id\":16,\"type\":\"txt\",\"value\":\"(413) 626-9760\",\"contactOrder\":2,\"notificationOrder\":1},{\"id\":17,\"type\":\"slack\",\"value\":\"https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX\",\"contactOrder\":3,\"notificationOrder\":2}]}],\"term\":{\"start\":\"2019-01-18\",\"duration\":4},\"organization\":{\"id\":1,\"name\":\"Arisia\"},\"level\":\"TURTLE\",\"created\":\"2018-08-25T17:53:37\"}";
-//      assertThat(this.json.parseObject(content).getId()).isEqualTo(1);
-//      assertThat(this.json.parseObject(content).getMember().getId()).isEqualTo(1);
+      String content = "{\"id\":\"00000000-0000-0000-0000-000000000000\",\"created\":\"2018-08-25T17:53:37-04:00\",\"level\":{\"id\":\"00000000-0000-0005-0000-000000000000\",\"name\":\"Turtle Track\",\"memberships\":[],\"organization\":null},\"term\":{\"id\":\"00000000-0000-0006-0002-000000000000\",\"start\":\"2019-01-18T00:00:00-05:00\",\"duration\":4,\"memberships\":[],\"organization\":null},\"organization\":{\"id\":\"00000000-0000-0002-0000-000000000000\",\"name\":\"Arisia\",\"terms\":[{\"id\":\"00000000-0000-0006-0000-000000000000\",\"start\":\"2017-01-13T00:00:00-05:00\",\"duration\":4,\"memberships\":[],\"organization\":null},{\"id\":\"00000000-0000-0006-0001-000000000000\",\"start\":\"2018-01-12T00:00:00-05:00\",\"duration\":4,\"memberships\":[],\"organization\":null},{\"id\":\"00000000-0000-0006-0002-000000000000\",\"start\":\"2019-01-18T00:00:00-05:00\",\"duration\":4,\"memberships\":[],\"organization\":null}],\"levels\":[{\"id\":\"00000000-0000-0005-0000-000000000000\",\"name\":\"Turtle Track\",\"memberships\":[],\"organization\":null},{\"id\":\"00000000-0000-0005-0001-000000000000\",\"name\":\"Fast Track - Satellite\",\"memberships\":[],\"organization\":null},{\"id\":\"00000000-0000-0005-0002-000000000000\",\"name\":\"Fast Track - Comet\",\"memberships\":[],\"organization\":null},{\"id\":\"00000000-0000-0005-0003-000000000000\",\"name\":\"Teen Lounge\",\"memberships\":[],\"organization\":null}],\"memberships\":[{\"id\":\"00000000-0000-0000-0000-000000000000\",\"created\":\"2018-08-25T17:53:37-04:00\",\"level\":\"00000000-0000-0005-0000-000000000000\",\"term\":\"00000000-0000-0006-0002-000000000000\",\"organization\":\"00000000-0000-0002-0000-000000000000\",\"membershipMembers\":[{\"id\":null,\"membership\":{\"id\":\"00000000-0000-0000-0000-000000000000\",\"created\":\"2018-08-25T17:53:37-04:00\",\"level\":\"00000000-0000-0005-0000-000000000000\",\"term\":\"00000000-0000-0006-0002-000000000000\",\"organization\":\"00000000-0000-0002-0000-000000000000\",\"membershipMembers\":[{\"id\":null,\"membership\":\"00000000-0000-0000-0000-000000000000\",\"member\":{\"id\":\"00000000-0000-0001-0000-000000000000\",\"firstName\":\"Elizabeth\",\"middleName\":\"Cooper\",\"lastName\":\"Rose\",\"nameSuffix\":\"II\",\"commonName\":\"Lizzie\",\"dateOfBirth\":\"2015-09-01\",\"pictures\":[{\"id\":\"00000000-0000-0003-0000-000000000000\",\"type\":\"profile\",\"isDefault\":true,\"name\":\"elizabeth_cooper_rose.jpeg\",\"uri\":\"http://guardian.houserose.com/guardian/organization/images/profile/00/00/00/1\",\"mediaType\":\"image/jpeg\",\"height\":300,\"width\":300,\"member\":\"00000000-0000-0001-0000-000000000000\"}],\"contacts\":[],\"membershipMembers\":[{\"id\":null,\"membership\":\"00000000-0000-0000-0000-000000000000\",\"member\":\"00000000-0000-0001-0000-000000000000\",\"type\":\"ward\"}]},\"type\":\"ward\"},{\"id\":null,\"membership\":\"00000000-0000-0000-0000-000000000000\",\"member\":{\"id\":\"00000000-0000-0001-0005-000000000000\",\"firstName\":\"Ian\",\"middleName\":\"Cooper\",\"lastName\":\"Rose\",\"nameSuffix\":null,\"commonName\":\"Ian\",\"dateOfBirth\":\"1969-12-22\",\"pictures\":[{\"id\":\"00000000-0000-0003-0005-000000000000\",\"type\":\"profile\",\"isDefault\":true,\"name\":\"ian_cooper_rose.jpeg\",\"uri\":\"http://guardian.houserose.com/guardian/organization/images/profile/00/00/00/7\",\"mediaType\":\"image/jpeg\",\"height\":300,\"width\":300,\"member\":\"00000000-0000-0001-0005-000000000000\"}],\"contacts\":[{\"id\":\"00000000-0000-0004-0000-000000000000\",\"type\":\"phone\",\"value\":\"(413) 626-6101\",\"contactOrder\":1,\"notificationOrder\":0,\"member\":\"00000000-0000-0001-0005-000000000000\"},{\"id\":\"00000000-0000-0004-0001-000000000000\",\"type\":\"sms\",\"value\":\"(413) 626-6101\",\"contactOrder\":2,\"notificationOrder\":1,\"member\":\"00000000-0000-0001-0005-000000000000\"},{\"id\":\"00000000-0000-0004-0002-000000000000\",\"type\":\"slack\",\"value\":\"POST https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX\",\"contactOrder\":3,\"notificationOrder\":2,\"member\":\"00000000-0000-0001-0005-000000000000\"},{\"id\":\"00000000-0000-0004-0003-000000000000\",\"type\":\"twitter\",\"value\":\"ian.cooper.rose\",\"contactOrder\":0,\"notificationOrder\":3,\"member\":\"00000000-0000-0001-0005-000000000000\"}],\"membershipMembers\":[{\"id\":null,\"membership\":\"00000000-0000-0000-0000-000000000000\",\"member\":\"00000000-0000-0001-0005-000000000000\",\"type\":\"guardian\"}]},\"type\":\"guardian\"},{\"id\":null,\"membership\":\"00000000-0000-0000-0000-000000000000\",\"member\":{\"id\":\"00000000-0000-0001-0006-000000000000\",\"firstName\":\"Laurel\",\"middleName\":\"Marie\",\"lastName\":\"Pickard\",\"nameSuffix\":null,\"commonName\":\"Laurel\",\"dateOfBirth\":\"1982-10-18\",\"pictures\":[{\"id\":\"00000000-0000-0003-0006-000000000000\",\"type\":\"profile\",\"isDefault\":true,\"name\":\"laurel_marie_pickard.jpeg\",\"uri\":\"http://guardian.houserose.com/guardian/organization/images/profile/00/00/00/6\",\"mediaType\":\"image/jpeg\",\"height\":300,\"width\":300,\"member\":\"00000000-0000-0001-0006-000000000000\"}],\"contacts\":[{\"id\":\"00000000-0000-0004-0004-000000000000\",\"type\":\"phone\",\"value\":\"(860) 558-9530\",\"contactOrder\":1,\"notificationOrder\":0,\"member\":\"00000000-0000-0001-0006-000000000000\"},{\"id\":\"00000000-0000-0004-0005-000000000000\",\"type\":\"sms\",\"value\":\"(860) 558-9530\",\"contactOrder\":2,\"notificationOrder\":1,\"member\":\"00000000-0000-0001-0006-000000000000\"},{\"id\":\"00000000-0000-0004-0006-000000000000\",\"type\":\"slack\",\"value\":\"POST https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX\",\"contactOrder\":3,\"notificationOrder\":2,\"member\":\"00000000-0000-0001-0006-000000000000\"}],\"membershipMembers\":[{\"id\":null,\"membership\":\"00000000-0000-0000-0000-000000000000\",\"member\":\"00000000-0000-0001-0006-000000000000\",\"type\":\"guardian\"}]},\"type\":\"guardian\"}]},\"member\":\"00000000-0000-0001-0000-000000000000\",\"type\":\"ward\"},{\"id\":null,\"membership\":\"00000000-0000-0000-0000-000000000000\",\"member\":\"00000000-0000-0001-0005-000000000000\",\"type\":\"guardian\"},{\"id\":null,\"membership\":\"00000000-0000-0000-0000-000000000000\",\"member\":\"00000000-0000-0001-0006-000000000000\",\"type\":\"guardian\"}]}]},\"membershipMembers\":[{\"id\":null,\"membership\":\"00000000-0000-0000-0000-000000000000\",\"member\":\"00000000-0000-0001-0000-000000000000\",\"type\":\"ward\"},{\"id\":null,\"membership\":\"00000000-0000-0000-0000-000000000000\",\"member\":\"00000000-0000-0001-0005-000000000000\",\"type\":\"guardian\"},{\"id\":null,\"membership\":\"00000000-0000-0000-0000-000000000000\",\"member\":\"00000000-0000-0001-0006-000000000000\",\"type\":\"guardian\"}]}";
+      assertThat(this.json.parseObject(content).getId()).isEqualTo(ECR_MEMBERSHIP_TEST_UUID);
+//      assertThat(this.json.parseObject(content).getMembershipMembers().get(0).getId()).isEqualTo(1);
 //      assertThat(this.json.parseObject(content).getMember().getFirstName()).isEqualTo("Elizabeth");
 //      assertThat(this.json.parseObject(content).getMember().getMiddleName()).isEqualTo("Cooper");
 //      assertThat(this.json.parseObject(content).getMember().getLastName()).isEqualTo("Rose");

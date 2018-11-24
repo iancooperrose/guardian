@@ -1,32 +1,39 @@
 package com.houserose.guardian.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.houserose.guardian.membership.CustomMembershipListDeserializer;
+import com.houserose.guardian.membership.CustomTermListDeserializer;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@ToString(exclude = {"levels", "terms", "memberships"})
-@Data
-@Builder
 @Entity
+@Builder
+@ToString(exclude = {"levels", "terms", "memberships"})
+@EqualsAndHashCode(exclude = {"id", "levels", "terms", "memberships"})
+@Getter
+@Setter
+@RequiredArgsConstructor
 @AllArgsConstructor
-@NoArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Organization {
 
    @Id
@@ -37,19 +44,26 @@ public class Organization {
    private String name;
 
    @Builder.Default
+   @Setter(value = AccessLevel.NONE)
    @OneToMany(mappedBy = "organization")
    @LazyCollection(LazyCollectionOption.FALSE)
-   private List<Membership> memberships = new ArrayList<>();
+//   @JsonDeserialize(using = CustomTermListDeserializer.class)
+   private List<Term> terms = new ArrayList<>();
 
    @Builder.Default
-   @OneToMany(mappedBy = "organization", cascade = CascadeType.PERSIST)
+   @Setter(value = AccessLevel.NONE)
+   @OneToMany(mappedBy = "organization")
    @LazyCollection(LazyCollectionOption.FALSE)
+//   @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", scope = Organization.class)
+//   @JsonDeserialize(using = CustomLevelListDeserializer.class)
    private List<Level> levels = new ArrayList<>();
 
    @Builder.Default
-   @OneToMany(mappedBy = "organization", cascade = CascadeType.PERSIST)
+   @OneToMany(mappedBy = "organization")
    @LazyCollection(LazyCollectionOption.FALSE)
-   private List<Term> terms = new ArrayList<>();
+//   @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", scope=Organization.class)
+   @JsonDeserialize(using = CustomMembershipListDeserializer.class)
+   private List<Membership> memberships = new ArrayList<>();
 
    public void addMembership(Membership membership) {
       memberships.add(membership);
@@ -62,7 +76,7 @@ public class Organization {
    }
 
    public void addLevel(Level level) {
-      levels.add(level);
+      this.levels.add(level);
       level.setOrganization(this);
    }
 
@@ -81,5 +95,3 @@ public class Organization {
       this.terms.remove(term);
    }
 }
-
-

@@ -1,9 +1,15 @@
 package com.houserose.guardian.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.houserose.guardian.membership.CustomMembershipMemberListDeserializer;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.LazyCollection;
@@ -13,7 +19,6 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import java.time.LocalDate;
@@ -21,12 +26,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@ToString(exclude = {"membershipMembers", "pictures", "contacts"})
-@Data
-@Builder
 @Entity
+@Builder
+@ToString(exclude = {"membershipMembers", "pictures", "contacts"})
+@EqualsAndHashCode(exclude = {"id", "membershipMembers", "pictures", "contacts"})
+@Getter
+@Setter
+@RequiredArgsConstructor
 @AllArgsConstructor
-@NoArgsConstructor
 public class Member {
 
    @Id
@@ -44,16 +51,20 @@ public class Member {
    @Builder.Default
    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
    @LazyCollection(LazyCollectionOption.FALSE)
+   @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
    private List<Picture> pictures = new ArrayList<>();
 
    @Builder.Default
    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
    @LazyCollection(LazyCollectionOption.FALSE)
+   @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
    private List<Contact> contacts = new ArrayList<>();
 
    @Builder.Default
    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
    @LazyCollection(LazyCollectionOption.FALSE)
+//   @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+   @JsonDeserialize(using = CustomMembershipMemberListDeserializer.class)
    private List<MembershipMember> membershipMembers = new ArrayList<>();
 
    public void addPicture(Picture picture) {

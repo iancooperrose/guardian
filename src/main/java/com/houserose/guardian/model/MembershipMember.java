@@ -1,38 +1,36 @@
 package com.houserose.guardian.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators.PropertyGenerator;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
-import javax.persistence.AssociationOverride;
-import javax.persistence.AssociationOverrides;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
 import javax.persistence.Table;
-import java.io.Serializable;
 import java.util.UUID;
 
-//@ToString(exclude = {"membership", "member"})
-@Builder
-@Data
-@Table(name = "membership_member")
 @Entity
+@Builder
+@ToString
+@EqualsAndHashCode(exclude = {"id"})
+@Getter
+@Setter
+@RequiredArgsConstructor
 @AllArgsConstructor
-@NoArgsConstructor
+@Table(name = "membership_member")
 public class MembershipMember {
 
    @Id
@@ -44,11 +42,13 @@ public class MembershipMember {
    @ManyToOne
    @JoinColumn(name = "membership_id")
    @LazyCollection(LazyCollectionOption.FALSE)
+   @JsonIdentityInfo(generator = PropertyGenerator.class, property = "id")
    private Membership membership;
 
    @ManyToOne
    @JoinColumn(name = "member_id")
    @LazyCollection(LazyCollectionOption.FALSE)
+   @JsonIdentityInfo(generator = PropertyGenerator.class, property = "id")
    private Member member;
 
    private String type;

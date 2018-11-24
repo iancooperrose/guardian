@@ -1,31 +1,11 @@
 package com.houserose.guardian;
 
 import com.houserose.guardian.membership.MembershipController;
-//import com.houserose.guardian.membership.MembershipService;
-import com.houserose.guardian.model.Membership;
-import io.restassured.module.mockmvc.RestAssuredMockMvc;
-import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.test.web.servlet.setup.StandaloneMockMvcBuilder;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import static com.houserose.guardian.GuardianTestDataFactory.connorPaulBouchardMembership;
-import static com.houserose.guardian.GuardianTestDataFactory.elizabethCooperRoseMembership;
-import static com.houserose.guardian.GuardianTestDataFactory.kathleenLouiseBouchardMembership;
-import static com.houserose.guardian.GuardianTestDataFactory.maxwellAllenPickardMembership;
-import static com.houserose.guardian.GuardianTestDataFactory.penelopeAdaPickardMembership;
-import static org.mockito.Mockito.when;
+//import com.houserose.guardian.membership.MembershipService;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(MembershipController.class)

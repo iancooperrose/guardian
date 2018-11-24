@@ -58,7 +58,6 @@ public class PictureRepositoryTest {
       assertThat(result.getMediaType()).isEqualTo("image/jpeg");
       assertThat(result.getHeight()).isEqualTo(300L);
       assertThat(result.getWidth()).isEqualTo(300L);
-      assertThat(result.getRank()).isEqualTo(1L);
    }
 
 //   @Test

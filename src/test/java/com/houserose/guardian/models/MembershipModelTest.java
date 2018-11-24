@@ -27,11 +27,11 @@ import static com.houserose.guardian.GuardianTestDataFactory.elizabethCooperRose
 import static com.houserose.guardian.GuardianTestDataFactory.elizabethCooperRoseDefaultProfilePicture;
 import static com.houserose.guardian.GuardianTestDataFactory.elizabethCooperRoseMembership;
 import static com.houserose.guardian.GuardianTestDataFactory.ianCooperRose;
-import static com.houserose.guardian.GuardianTestDataFactory.ianCooperRoseDefaultPhoneContact;
 import static com.houserose.guardian.GuardianTestDataFactory.ianCooperRoseDefaultProfilePicture;
-import static com.houserose.guardian.GuardianTestDataFactory.ianCooperRoseDefaultSlackContact;
-import static com.houserose.guardian.GuardianTestDataFactory.ianCooperRoseDefaultTwitterContact;
-import static com.houserose.guardian.GuardianTestDataFactory.ianCooperRoseDefaultTxtContact;
+import static com.houserose.guardian.GuardianTestDataFactory.ianCooperRosePhoneContact;
+import static com.houserose.guardian.GuardianTestDataFactory.ianCooperRoseSlackContact;
+import static com.houserose.guardian.GuardianTestDataFactory.ianCooperRoseSmsContact;
+import static com.houserose.guardian.GuardianTestDataFactory.ianCooperRoseTwitterContact;
 import static com.houserose.guardian.GuardianTestDataFactory.laurelMariePickard;
 import static com.houserose.guardian.GuardianTestDataFactory.laurelMariePickardDefaultPhoneContact;
 import static com.houserose.guardian.GuardianTestDataFactory.laurelMariePickardDefaultProfilePicture;
@@ -100,10 +100,10 @@ public class MembershipModelTest {
       ecr.addPicture(ecrPicture);
 
       icrPicture = ianCooperRoseDefaultProfilePicture().build();
-      icrContact1 = ianCooperRoseDefaultPhoneContact().build();
-      icrContact2 = ianCooperRoseDefaultTxtContact().build();
-      icrContact3 = ianCooperRoseDefaultSlackContact().build();
-      icrContact4 = ianCooperRoseDefaultTwitterContact().build();
+      icrContact1 = ianCooperRosePhoneContact().build();
+      icrContact2 = ianCooperRoseSmsContact().build();
+      icrContact3 = ianCooperRoseSlackContact().build();
+      icrContact4 = ianCooperRoseTwitterContact().build();
       icr = ianCooperRose().build();
       icr.addPicture(icrPicture);
       icr.addContact(icrContact1);

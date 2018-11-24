@@ -1,30 +1,9 @@
 package com.houserose.guardian.membership;
 
-import com.houserose.guardian.model.Membership;
-//import com.houserose.guardian.repositories.MembershipRepository;
-import org.junit.Before;
-import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static com.houserose.guardian.GuardianTestDataFactory.connorPaulBouchardMembership;
-import static com.houserose.guardian.GuardianTestDataFactory.elizabethCooperRoseMembership;
-import static com.houserose.guardian.GuardianTestDataFactory.kathleenLouiseBouchardMembership;
-import static com.houserose.guardian.GuardianTestDataFactory.maxwellAllenPickardMembership;
-import static com.houserose.guardian.GuardianTestDataFactory.penelopeAdaPickardMembership;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.isNotNull;
-import static org.mockito.Mockito.when;
+//import com.houserose.guardian.repositories.MembershipRepository;
 
 @RunWith(MockitoJUnitRunner.class)
 public class MembershipServiceTest {
