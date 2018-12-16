@@ -1,7 +1,10 @@
 package com.houserose.guardian.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.houserose.guardian.membership.CustomLevelListDeserializer;
 import com.houserose.guardian.membership.CustomMembershipListDeserializer;
 import com.houserose.guardian.membership.CustomTermListDeserializer;
 import lombok.AccessLevel;
@@ -27,13 +30,13 @@ import java.util.UUID;
 
 @Entity
 @Builder
-@ToString(exclude = {"levels", "terms", "memberships"})
+@ToString(exclude = {"memberships"})
 @EqualsAndHashCode(exclude = {"id", "levels", "terms", "memberships"})
 @Getter
 @Setter
 @RequiredArgsConstructor
 @AllArgsConstructor
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class Organization {
 
    @Id
@@ -47,7 +50,8 @@ public class Organization {
    @Setter(value = AccessLevel.NONE)
    @OneToMany(mappedBy = "organization")
    @LazyCollection(LazyCollectionOption.FALSE)
-//   @JsonDeserialize(using = CustomTermListDeserializer.class)
+//   @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", scope = Organization.class)
+   @JsonDeserialize(using = CustomTermListDeserializer.class)
    private List<Term> terms = new ArrayList<>();
 
    @Builder.Default
@@ -55,7 +59,7 @@ public class Organization {
    @OneToMany(mappedBy = "organization")
    @LazyCollection(LazyCollectionOption.FALSE)
 //   @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", scope = Organization.class)
-//   @JsonDeserialize(using = CustomLevelListDeserializer.class)
+   @JsonDeserialize(using = CustomLevelListDeserializer.class)
    private List<Level> levels = new ArrayList<>();
 
    @Builder.Default

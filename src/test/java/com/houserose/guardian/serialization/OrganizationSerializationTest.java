@@ -124,60 +124,7 @@ public class OrganizationSerializationTest {
 
    @Test
    public void deserializationTest() throws IOException {
-      String content = "{\n" +
-              "  \"id\": \"00000000-0000-0002-0000-000000000000\",\n" +
-              "  \"name\": \"Arisia\",\n" +
-              "  \"terms\": [\n" +
-              "    {\n" +
-              "      \"id\": \"00000000-0000-0006-0000-000000000000\",\n" +
-              "      \"start\": \"2017-01-13T00:00:00-05:00\",\n" +
-              "      \"duration\": 4,\n" +
-              "      \"memberships\": [],\n" +
-              "      \"organization\": null\n" +
-              "    },\n" +
-              "    {\n" +
-              "      \"id\": \"00000000-0000-0006-0001-000000000000\",\n" +
-              "      \"start\": \"2018-01-12T00:00:00-05:00\",\n" +
-              "      \"duration\": 4,\n" +
-              "      \"memberships\": [],\n" +
-              "      \"organization\": null\n" +
-              "    },\n" +
-              "    {\n" +
-              "      \"id\": \"00000000-0000-0006-0002-000000000000\",\n" +
-              "      \"start\": \"2019-01-18T00:00:00-05:00\",\n" +
-              "      \"duration\": 4,\n" +
-              "      \"memberships\": [],\n" +
-              "      \"organization\": null\n" +
-              "    }\n" +
-              "  ],\n" +
-              "  \"levels\": [\n" +
-              "    {\n" +
-              "      \"id\": \"00000000-0000-0005-0000-000000000000\",\n" +
-              "      \"name\": \"Turtle Track\",\n" +
-              "      \"memberships\": [],\n" +
-              "      \"organization\": null\n" +
-              "    },\n" +
-              "    {\n" +
-              "      \"id\": \"00000000-0000-0005-0001-000000000000\",\n" +
-              "      \"name\": \"Fast Track - Satellite\",\n" +
-              "      \"memberships\": [],\n" +
-              "      \"organization\": null\n" +
-              "    },\n" +
-              "    {\n" +
-              "      \"id\": \"00000000-0000-0005-0002-000000000000\",\n" +
-              "      \"name\": \"Fast Track - Comet\",\n" +
-              "      \"memberships\": [],\n" +
-              "      \"organization\": null\n" +
-              "    },\n" +
-              "    {\n" +
-              "      \"id\": \"00000000-0000-0005-0003-000000000000\",\n" +
-              "      \"name\": \"Teen Lounge\",\n" +
-              "      \"memberships\": [],\n" +
-              "      \"organization\": null\n" +
-              "    }\n" +
-              "  ],\n" +
-              "  \"memberships\": []\n" +
-              "}";
+      String content = "{\"id\":\"00000000-0000-0002-0000-000000000000\",\"name\":\"Arisia\",\"terms\":[{\"id\":\"00000000-0000-0006-0000-000000000000\",\"start\":\"2017-01-13T00:00:00-05:00\",\"duration\":4,\"organization\":{\"id\":\"00000000-0000-0002-0000-000000000000\",\"name\":\"Arisia\",\"terms\":[{\"id\":\"00000000-0000-0006-0000-000000000000\",\"start\":\"2017-01-13T00:00:00-05:00\",\"duration\":4,\"organization\":\"00000000-0000-0002-0000-000000000000\"},{\"id\":\"00000000-0000-0006-0001-000000000000\",\"start\":\"2018-01-12T00:00:00-05:00\",\"duration\":4,\"organization\":\"00000000-0000-0002-0000-000000000000\"},{\"id\":\"00000000-0000-0006-0002-000000000000\",\"start\":\"2019-01-18T00:00:00-05:00\",\"duration\":4,\"organization\":\"00000000-0000-0002-0000-000000000000\"}],\"levels\":[{\"id\":\"00000000-0000-0005-0000-000000000000\",\"name\":\"Turtle Track\",\"memberships\":[],\"organization\":\"00000000-0000-0002-0000-000000000000\"},{\"id\":\"00000000-0000-0005-0001-000000000000\",\"name\":\"Fast Track - Satellite\",\"memberships\":[],\"organization\":\"00000000-0000-0002-0000-000000000000\"},{\"id\":\"00000000-0000-0005-0002-000000000000\",\"name\":\"Fast Track - Comet\",\"memberships\":[],\"organization\":\"00000000-0000-0002-0000-000000000000\"},{\"id\":\"00000000-0000-0005-0003-000000000000\",\"name\":\"Teen Lounge\",\"memberships\":[],\"organization\":\"00000000-0000-0002-0000-000000000000\"}]}},{\"id\":\"00000000-0000-0006-0001-000000000000\",\"start\":\"2018-01-12T00:00:00-05:00\",\"duration\":4,\"organization\":\"00000000-0000-0002-0000-000000000000\"},{\"id\":\"00000000-0000-0006-0002-000000000000\",\"start\":\"2019-01-18T00:00:00-05:00\",\"duration\":4,\"organization\":\"00000000-0000-0002-0000-000000000000\"}],\"levels\":[{\"id\":\"00000000-0000-0005-0000-000000000000\",\"name\":\"Turtle Track\",\"memberships\":[],\"organization\":\"00000000-0000-0002-0000-000000000000\"},{\"id\":\"00000000-0000-0005-0001-000000000000\",\"name\":\"Fast Track - Satellite\",\"memberships\":[],\"organization\":\"00000000-0000-0002-0000-000000000000\"},{\"id\":\"00000000-0000-0005-0002-000000000000\",\"name\":\"Fast Track - Comet\",\"memberships\":[],\"organization\":\"00000000-0000-0002-0000-000000000000\"},{\"id\":\"00000000-0000-0005-0003-000000000000\",\"name\":\"Teen Lounge\",\"memberships\":[],\"organization\":\"00000000-0000-0002-0000-000000000000\"}]}";
       assertThat(this.json.parseObject(content).getId()).isEqualTo(ARISIA_ORGANIZATION_TEST_UUID);
       assertThat(this.json.parseObject(content).getName()).isEqualToIgnoringCase("Arisia");
       assertThat(this.json.parseObject(content).getTerms().get(0).getId()).isEqualTo(ARISIA_2017_TERM_TEST_UUID);
