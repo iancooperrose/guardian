@@ -1,12 +1,6 @@
 package com.houserose.guardian.model;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.houserose.guardian.membership.CustomLevelListDeserializer;
-import com.houserose.guardian.membership.CustomMembershipListDeserializer;
-import com.houserose.guardian.membership.CustomTermListDeserializer;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -51,7 +45,6 @@ public class Organization {
    @OneToMany(mappedBy = "organization")
    @LazyCollection(LazyCollectionOption.FALSE)
 //   @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", scope = Organization.class)
-   @JsonDeserialize(using = CustomTermListDeserializer.class)
    private List<Term> terms = new ArrayList<>();
 
    @Builder.Default
@@ -59,14 +52,12 @@ public class Organization {
    @OneToMany(mappedBy = "organization")
    @LazyCollection(LazyCollectionOption.FALSE)
 //   @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", scope = Organization.class)
-   @JsonDeserialize(using = CustomLevelListDeserializer.class)
    private List<Level> levels = new ArrayList<>();
 
    @Builder.Default
    @OneToMany(mappedBy = "organization")
    @LazyCollection(LazyCollectionOption.FALSE)
 //   @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", scope=Organization.class)
-   @JsonDeserialize(using = CustomMembershipListDeserializer.class)
    private List<Membership> memberships = new ArrayList<>();
 
    public void addMembership(Membership membership) {

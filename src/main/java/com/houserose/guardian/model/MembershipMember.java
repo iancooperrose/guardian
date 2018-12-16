@@ -2,6 +2,8 @@ package com.houserose.guardian.model;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators.PropertyGenerator;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.houserose.guardian.membership.CustomMembershipMemberDeserializer;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -31,6 +33,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Table(name = "membership_member")
+@JsonDeserialize(using = CustomMembershipMemberDeserializer.class)
 public class MembershipMember {
 
    @Id

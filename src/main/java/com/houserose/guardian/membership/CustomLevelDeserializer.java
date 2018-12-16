@@ -4,28 +4,29 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import com.houserose.guardian.model.Term;
+import com.houserose.guardian.model.Level;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CustomTermListDeserializer extends StdDeserializer<List<Term>> {
+public class CustomLevelDeserializer extends StdDeserializer<Level> {
 
-   public CustomTermListDeserializer() {
+   public CustomLevelDeserializer() {
       this(null);
    }
 
-   public CustomTermListDeserializer(Class<?> vc) {
+   public CustomLevelDeserializer(Class<?> vc) {
       super(vc);
    }
 
    @Override
-   public List<Term> deserialize(
+   public Level deserialize(
            JsonParser jsonparser,
            DeserializationContext context)
            throws IOException, JsonProcessingException {
 
-      return new ArrayList<>();
+      // JB: TODO
+      return null;
    }
 }

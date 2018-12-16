@@ -4,28 +4,29 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import com.houserose.guardian.model.MembershipMember;
+import com.houserose.guardian.model.Membership;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CustomMembershipMemberListDeserializer extends StdDeserializer<List<MembershipMember>> {
+public class CustomMembershipDeserializer extends StdDeserializer<Membership> {
 
-   public CustomMembershipMemberListDeserializer() {
+   public CustomMembershipDeserializer() {
       this(null);
    }
 
-   public CustomMembershipMemberListDeserializer(Class<?> vc) {
+   public CustomMembershipDeserializer(Class<?> vc) {
       super(vc);
    }
 
    @Override
-   public List<MembershipMember> deserialize(
+   public Membership deserialize(
            JsonParser jsonparser,
            DeserializationContext context)
            throws IOException, JsonProcessingException {
 
-      return new ArrayList<>();
+      // JB: TODO
+      return null;
    }
 }

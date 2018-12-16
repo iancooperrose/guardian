@@ -3,7 +3,7 @@ package com.houserose.guardian.model;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.houserose.guardian.membership.CustomMembershipMemberListDeserializer;
+import com.houserose.guardian.membership.CustomMembershipMemberDeserializer;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -64,7 +64,6 @@ public class Member {
    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
    @LazyCollection(LazyCollectionOption.FALSE)
 //   @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-   @JsonDeserialize(using = CustomMembershipMemberListDeserializer.class)
    private List<MembershipMember> membershipMembers = new ArrayList<>();
 
    public void addPicture(Picture picture) {

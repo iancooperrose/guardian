@@ -4,7 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.houserose.guardian.membership.CustomMembershipMemberListDeserializer;
+import com.houserose.guardian.membership.CustomLevelDeserializer;
+import com.houserose.guardian.membership.CustomMembershipMemberDeserializer;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -36,6 +37,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonDeserialize(using = CustomLevelDeserializer.class)
 public class Level {
 
    @Id
@@ -49,7 +51,6 @@ public class Level {
    @OneToMany(mappedBy = "id")
    @LazyCollection(LazyCollectionOption.FALSE)
 //   @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-   @JsonDeserialize(using = CustomMembershipMemberListDeserializer.class)
    private List<Membership> memberships = new ArrayList<>();
 
    @ManyToOne

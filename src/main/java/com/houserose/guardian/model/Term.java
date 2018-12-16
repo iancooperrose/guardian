@@ -4,7 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.houserose.guardian.membership.CustomMembershipListDeserializer;
+import com.houserose.guardian.membership.CustomMembershipDeserializer;
+import com.houserose.guardian.membership.CustomTermDeserializer;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -37,6 +38,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonDeserialize(using = CustomTermDeserializer.class)
 public class Term {
 
    @Id
@@ -51,7 +53,6 @@ public class Term {
    @OneToMany(mappedBy = "id")
    @LazyCollection(LazyCollectionOption.FALSE)
 //   @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-   @JsonDeserialize(using = CustomMembershipListDeserializer.class)
    private List<Membership> memberships = new ArrayList<>();
 
    @ManyToOne

@@ -2,6 +2,8 @@ package com.houserose.guardian.model;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.houserose.guardian.membership.CustomMembershipDeserializer;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -35,6 +37,7 @@ import java.util.UUID;
 @Setter
 @RequiredArgsConstructor
 @AllArgsConstructor
+@JsonDeserialize(using = CustomMembershipDeserializer.class)
 public class Membership {
 
    @Id
@@ -68,7 +71,6 @@ public class Membership {
    @OneToMany(mappedBy = "membership", cascade = CascadeType.ALL)
    @LazyCollection(LazyCollectionOption.FALSE)
    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-//   @JsonDeserialize(using = CustomMembershipMemberListDeserializer.class)
    private List<MembershipMember> membershipMembers = new ArrayList<>();
 
 
